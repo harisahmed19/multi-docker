@@ -1,0 +1,15 @@
+sudo: required
+services:
+ - docker
+
+before_install:
+ - docker build -t harisahmed19/complex-test -f ./client/Dockerfile.dev ./client
+
+script:
+ - docker run -e CI=true harisahmed19/complex-test npm test 
+
+after_success:
+ - docker build -t harisahmed19/multi-client ./client
+ - docker build -t harisahmed19/multi-nginx ./nginx
+ - docker build -t harisahmed19/multi-worker ./worker
+ - docker build -t harisahmed19/multi-server ./server
